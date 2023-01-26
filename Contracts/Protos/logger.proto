@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option csharp_namespace = "Contracts";
+
+package logger;
+
+service Logger {
+  rpc SendLogs (LogItems) returns (ResultReply);
+  rpc GetAllTypes (GetAllTypesRequest) returns (TypesReply);
+  rpc GetByType(TypeRequest) returns (stream LogItemsReply);
+}
+
+message Error {
+  string message = 1;
+}
+
+message LogItems {
+  repeated LogItem items = 1;
+}
+
+message LogItem {
+  string messageType = 1;
+  string message = 2;
+}
+
+message LogItemsReply {
+  oneof result {
+    Error error = 1;
+    LogItems logItems = 2;
+  }
+}
+
+message ResultReply {
+  bool success = 1;
+  bool errorMessage = 2;
+}
+
+message GetAllTypesRequest {
+}
+
+message TypeRequest {
+  string type = 1;
+}
+
+message Types {
+  repeated string items = 1;
+}
+
+message TypesReply {
+  oneof result {
+    Types types = 1;
+    Error error = 2;
+  }
+}
